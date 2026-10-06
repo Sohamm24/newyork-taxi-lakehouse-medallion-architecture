@@ -1,0 +1,14 @@
+nyc_taxi_lakehouse:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "/usr/app/dbt_project/nyc_taxi_gold.duckdb"
+      extensions:
+        - httpfs
+      settings:
+        s3_endpoint: "{{ env_var('MINIO_HOST', 'minio') }}:9000"
+        s3_access_key_id: "{{ env_var('MINIO_ROOT_USER', 'minioadmin') }}"
+        s3_secret_access_key: "{{ env_var('MINIO_ROOT_PASSWORD', 'minioadmin') }}"
+        s3_use_ssl: false
+        s3_url_style: "path"
