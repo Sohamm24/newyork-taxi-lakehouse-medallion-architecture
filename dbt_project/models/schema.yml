@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: gold_daily_trips_revenue
+    description: "Daily aggregated yellow taxi trip volume and revenue performance"
+    columns:
+      - name: pickup_date
+        description: "Primary key date of taxi pickups"
+        tests:
+          - unique
+          - not_null
+      - name: total_trips
+        description: "Count of trips on the given date"
+        tests:
+          - not_null
+      - name: total_revenue
+        description: "Sum of total fare amounts and surcharges"
+        tests:
+          - not_null
+
+  - name: gold_pickup_zone_metrics
+    description: "Aggregated trip volume and revenue performance by pickup zone"
+    columns:
+      - name: pickup_location_id
+        description: "TLC Taxi Zone Location ID (Primary Key)"
+        tests:
+          - unique
+          - not_null
+      - name: borough
+        description: "NYC Borough name"
+        tests:
+          - not_null
+      - name: total_trips
+        description: "Total trips originating in zone"
+        tests:
+          - not_null
+      - name: total_revenue
+        description: "Total revenue generated in zone"
+        tests:
+          - not_null
+
+  - name: gold_hourly_fare_tip_metrics
+    description: "Hourly average fares, tips, and tip percentages (hours 0-23)"
+    columns:
+      - name: pickup_hour
+        description: "Hour of day (0-23)"
+        tests:
+          - unique
+          - not_null
+      - name: total_trips
+        description: "Total trips recorded during this hour"
+        tests:
+          - not_null
+      - name: avg_fare
+        description: "Average base fare during this hour"
+        tests:
+          - not_null
