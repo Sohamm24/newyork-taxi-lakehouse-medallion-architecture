@@ -29,7 +29,7 @@ This project is a **senior-level Data Engineering portfolio platform** demonstra
 |---|---|
 | **Medallion Architecture** | Bronze to Silver to Gold on MinIO (S3-compatible) using Delta Lake ACID transactions |
 | **Data Quality & Quarantine** | 528K invalid records automatically quarantined with typed `reject_reason` codes |
-| **Idempotent Pipelines** | Dynamic partition overwrites + natural-key deduplication — zero duplicates on any re-run |
+| **Idempotent Pipelines** | Dynamic partition overwrites + natural-key deduplication ï¿½ zero duplicates on any re-run |
 | **Enterprise Orchestration** | Airflow DAGs triggering Docker containers (DoD architecture) with retry policies |
 | **Analytical Serving** | DuckDB vectorized bridge to PostgreSQL to interactive Metabase executive dashboard |
 | **Performance Engineering** | Empirical Spark benchmark suite with columnar storage, partition pruning, and caching |
@@ -156,7 +156,7 @@ This single command will:
 **Scripts**: [download_data.py](scripts/download_data.py), [upload_to_minio.py](scripts/upload_to_minio.py)
 
 - Streams **~100 MB** of NYC TLC Yellow Taxi Parquet files for **January and February 2024** plus `taxi_zone_lookup.csv` from the official CloudFront CDN.
-- Uploads to `s3a://bronze/raw/` in MinIO using idempotent pre-flight hash/size checks — safe to re-run anytime.
+- Uploads to `s3a://bronze/raw/` in MinIO using idempotent pre-flight hash/size checks ï¿½ safe to re-run anytime.
 
 ---
 
@@ -166,8 +166,8 @@ This single command will:
 
 - Ingests raw Parquet and CSV into unified **Delta Lake** tables with zero transformation.
 - Appends two lineage columns to every row:
-  - `_ingestion_ts` — UTC timestamp of ingest event
-  - `_source_file` — originating S3 URI for full audit traceability
+  - `_ingestion_ts` ï¿½ UTC timestamp of ingest event
+  - `_source_file` ï¿½ originating S3 URI for full audit traceability
 - **Output**: `5,972,150` raw trip records + `265` taxi zones written to Delta.
 
 ---
@@ -188,7 +188,7 @@ Applies 6-tier validation with hierarchical reject tagging:
 | Pickup year/month outside Jan-Feb 2024 | `OUT_OF_BOUNDS_TIMESTAMP` |
 
 - **Deduplication**: Window dedup on natural key `(VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, PULocationID, DOLocationID, fare_amount, trip_distance)`.
-- **Dynamic Partition Overwrite**: Re-runs only overwrite affected `pickup_date` partitions — full idempotency guaranteed.
+- **Dynamic Partition Overwrite**: Re-runs only overwrite affected `pickup_date` partitions ï¿½ full idempotency guaranteed.
 - **Output**: `5,443,370` clean rows to `silver/yellow_taxi` (partitioned) and `528,779` rejected rows to `silver/yellow_taxi_quarantine`.
 
 ---
@@ -225,7 +225,7 @@ Run via `make benchmark` ([scripts/spark_benchmark.py](scripts/spark_benchmark.p
 
 ## Data Quality & Testing
 
-### PySpark Unit Tests — 11 Tests
+### PySpark Unit Tests ï¿½ 11 Tests
 
 ```bash
 make test          # Linux/macOS
@@ -234,7 +234,7 @@ make test          # Linux/macOS
 
 Covers: quarantine boundary conditions (zero passengers, negative fares, GPS out-of-range), dynamic partition overwrite idempotency, and Gold aggregation math.
 
-### dbt Data Quality Suite — 16 Tests
+### dbt Data Quality Suite ï¿½ 16 Tests
 
 ```bash
 make dbt-test          # Linux/macOS
@@ -276,28 +276,28 @@ Engineered to run on an **8 GB RAM / 4-core developer laptop** (Windows, macOS, 
 ```
 newyork-taxi-lakehouse-medallion-architecture/
 +-- airflow/
-¦   +-- dags/                   # Airflow DAG definitions (DoD architecture)
+ï¿½   +-- dags/                   # Airflow DAG definitions (DoD architecture)
 +-- dbt_project/                # dbt models + 16 data quality tests (DuckDB adapter)
 +-- docker/
-¦   +-- airflow/                # Custom Airflow 2.9.2 + Docker CLI image
-¦   +-- dbt/                    # dbt + DuckDB + boto3 image
-¦   +-- minio-init/             # Bucket provisioning script
-¦   +-- spark/                  # PySpark 3.5.1 + Delta Lake 3.2.0 image
+ï¿½   +-- airflow/                # Custom Airflow 2.9.2 + Docker CLI image
+ï¿½   +-- dbt/                    # dbt + DuckDB + boto3 image
+ï¿½   +-- minio-init/             # Bucket provisioning script
+ï¿½   +-- spark/                  # PySpark 3.5.1 + Delta Lake 3.2.0 image
 +-- docs/
-¦   +-- benchmark_results.md    # Empirical Spark benchmark logs
-¦   +-- dashboard_overview.png  # Metabase dashboard screenshot
+ï¿½   +-- benchmark_results.md    # Empirical Spark benchmark logs
+ï¿½   +-- dashboard_overview.png  # Metabase dashboard screenshot
 +-- scripts/
-¦   +-- download_data.py        # Streaming NYC TLC data downloader
-¦   +-- upload_to_minio.py      # Idempotent S3 uploader
-¦   +-- load_gold_to_postgres.py # DuckDB to PostgreSQL vectorized sync
-¦   +-- setup_metabase.py       # Metabase dashboard auto-provisioner
-¦   +-- spark_benchmark.py      # Performance benchmark suite
-¦   +-- verify_idempotency.py   # Pipeline re-run validation script
+ï¿½   +-- download_data.py        # Streaming NYC TLC data downloader
+ï¿½   +-- upload_to_minio.py      # Idempotent S3 uploader
+ï¿½   +-- load_gold_to_postgres.py # DuckDB to PostgreSQL vectorized sync
+ï¿½   +-- setup_metabase.py       # Metabase dashboard auto-provisioner
+ï¿½   +-- spark_benchmark.py      # Performance benchmark suite
+ï¿½   +-- verify_idempotency.py   # Pipeline re-run validation script
 +-- spark_jobs/
-¦   +-- bronze.py               # Bronze ingestion + lineage enrichment
-¦   +-- silver.py               # Cleaning, validation, quarantine routing
-¦   +-- gold.py                 # Aggregation + Parquet export
-¦   +-- common.py               # Shared Spark session + audit logging utils
+ï¿½   +-- bronze.py               # Bronze ingestion + lineage enrichment
+ï¿½   +-- silver.py               # Cleaning, validation, quarantine routing
+ï¿½   +-- gold.py                 # Aggregation + Parquet export
+ï¿½   +-- common.py               # Shared Spark session + audit logging utils
 +-- tests/                      # 11 PySpark pytest unit tests
 +-- data/raw/                   # Local raw Parquet + CSV landing zone
 +-- docker-compose.yml          # Multi-profile service definitions
@@ -320,10 +320,3 @@ newyork-taxi-lakehouse-medallion-architecture/
 | **Gold** | `hourly_fare_tip_metrics` | 24 rows (24 hours) |
 | **Audit** | `pipeline_audit` | 1 row per job run |
 
----
-
-<div align="center">
-
-Built for **Senior Data Engineering** portfolio demonstrations and technical interviews.
-
-</div>
